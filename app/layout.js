@@ -1,6 +1,7 @@
 import './globals.css';
 import { Inter } from 'next/font/google';
 import { ChakraProviders } from '@/utils/ChakraProviders';
+import { poppins } from '@/utils/fonts';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -12,8 +13,10 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang='en'>
-      <body className={inter.className}>
-        <ChakraProviders>{children}</ChakraProviders>
+      <body className={poppins.className || inter.className}>
+        <div className='bg-[url("/assets/img/bg.jpg")] bg-cover bg-center'>
+          <ChakraProviders>{children}</ChakraProviders>
+        </div>
       </body>
     </html>
   );
