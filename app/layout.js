@@ -15,7 +15,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang='en'>
       <body className={poppins.className || inter.className}>
-        <div className='bg-[url("/assets/img/bg.jpg")] bg-cover bg-center bg-opacity-70'>
+        <div className='bg-[url("/assets/img/bg2.jpg")] bg-cover bg-center bg-opacity-70'>
           <XtrataProvider>
             <ChakraProviders>{children}</ChakraProviders>
           </XtrataProvider>

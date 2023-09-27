@@ -7,5 +7,5 @@
 ==========================*/
 
 .xtr-main {
-  @apply flex w-screen h-screen max-w-7xl justify-center items-center bg-slate-200 backdrop-blur-md bg-opacity-80;
+  @apply flex w-screen h-screen max-w-7xl mx-auto justify-center backdrop-blur-sm bg-opacity-80;
 }

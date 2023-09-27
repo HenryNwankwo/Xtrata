@@ -1,5 +1,10 @@
+import Header from '@/components/Header';
 import Image from 'next/image';
 
 export default function Home() {
-  return <main className='xtr-main'></main>;
+  return (
+    <main className='xtr-main'>
+      <Header></Header>
+    </main>
+  );
 }
