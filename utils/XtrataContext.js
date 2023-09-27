@@ -1,11 +1,12 @@
 'use client';
-const { useContext, createContext } = require('react');
+const { useContext, createContext, useState } = require('react');
 
 const XtrataContext = createContext();
 
 export const XtrataProvider = ({ children }) => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   //The object values of the provider
-  const providerValues = {};
+  const providerValues = { isMenuOpen, setIsMenuOpen };
 
   return (
     <XtrataContext.Provider value={providerValues}>

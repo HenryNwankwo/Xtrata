@@ -9,3 +9,21 @@
 .xtr-main {
   @apply flex w-screen h-screen max-w-7xl mx-auto justify-center backdrop-blur-sm bg-opacity-80;
 }
+
+/* ======================
+========FOOTER========
+====================== */
+
+.xtr-footer {
+  @apply flex w-full h-fit flex-col items-center justify-center space-y-2.5 bg-gray-700 text-gray-300 py-8;
+}
+.xtr-foot-links {
+  @apply flex flex-col items-center justify-center md:flex-row space-y-1.5 md:space-y-0 md:space-x-3 hover:underline;
+}
+
+.xtr-social-links {
+  @apply flex items-center justify-center space-x-3 hover:text-white;
+}
+.xtr-social-icons {
+  @apply text-2xl hover:text-white hover:scale-150;
+}
