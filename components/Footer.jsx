@@ -29,7 +29,12 @@ const Footer = () => {
         <Link href='#'> Privacy & Policy</Link>
       </article>
       <article className='xtr-copyright'>
-        <p> &copy; {`${currentYear} Xtrata`} </p>
+        <p>
+          <Link href='/' className='hover:underline'>
+            Xtrata
+          </Link>{' '}
+          &copy; {`${currentYear}`}{' '}
+        </p>
       </article>
     </footer>
   );

@@ -14,10 +14,10 @@ function Header() {
 
   //Stylings
   const headerStyles = {
-    bg: 'blackAlpha.700',
+    bg: 'whiteAlpha.700',
     w: '100%',
     h: 12,
-    color: 'white',
+    color: 'gray.600',
     px: { base: '20px', md: '50px' },
     py: '15px',
     backdropBlur: '18px',
@@ -29,26 +29,28 @@ function Header() {
     justifyContent: 'space-between',
     alignItems: 'center',
     position: 'fixed',
+    top: 0,
   };
   const logoStyles = {
     fontSize: 25,
+    color: 'blackAlpha.700',
     fontWeight: 'semibold',
     ':hover': {
-      color: 'yellow.200',
+      color: 'blackAlpha.900',
       textDecoration: 'none',
     },
   };
   const navLinkStyles = {
     px: '10px',
     textAlign: 'center',
-    color: 'whiteAlpha.900',
+    color: 'blackAlpha.700',
     w: { base: '100%', md: 'fit-content' },
     ':hover': {
       borderBottom: '2px',
       borderStyle: 'solid',
-      borderColor: 'gray.300',
+      borderColor: 'blackAlpha.900',
       textDecoration: 'none',
-      color: 'yellow.200',
+      color: 'blackAlpha.900',
     },
   };
   const menuStyles = {
