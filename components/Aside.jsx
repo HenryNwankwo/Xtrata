@@ -43,8 +43,8 @@ function Header() {
     w: '100%',
     p: '10px',
     ':hover': {
-      color: 'blackAlpha.900',
       textDecoration: 'none',
+      bg: 'whiteAlpha.800',
     },
     display: 'flex',
     justifyContent: 'center',
@@ -94,7 +94,7 @@ function Header() {
         <p className='hidden md:flex'>Xtrata</p>
       </ChakraLink>
       <HStack as='nav' sx={menuStyles}>
-        <ChakraLink as={Link} href='#' sx={navLinkStyles}>
+        <ChakraLink as={Link} href='/' sx={navLinkStyles}>
           <Box
             sx={{
               display: 'flex',
@@ -111,7 +111,7 @@ function Header() {
           </Box>
           <p className='text-xs md:text-base'>Extract</p>
         </ChakraLink>
-        <ChakraLink as={Link} href='#' sx={navLinkStyles}>
+        <ChakraLink as={Link} href='checker' sx={navLinkStyles}>
           <AiOutlineFileSearch className='text-lg md:text-2xl text-white lg:mr-2 w-10 mb-1 lg:mb-0' />
           <p className='text-xs md:text-base'>Check</p>
         </ChakraLink>

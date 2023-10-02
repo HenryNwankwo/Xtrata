@@ -7,7 +7,7 @@
 ==========================*/
 
 .xtr-main {
-  @apply flex  flex-col w-screen h-screen max-w-7xl mx-auto justify-center backdrop-blur-sm bg-opacity-80;
+  @apply flex  flex-col w-screen h-screen max-w-7xl mx-auto justify-center backdrop-blur-sm bg-opacity-70 overflow-hidden;
 }
 
 /* ======================
@@ -15,7 +15,7 @@
 ====================== */
 
 .xtr-footer {
-  @apply flex w-full h-fit flex-col items-center justify-center space-y-2.5 bg-white bg-opacity-70 backdrop-blur-md text-gray-700 py-8;
+  @apply flex w-full h-fit flex-col items-center justify-center mt-auto space-y-2.5 bg-transparent text-gray-700 py-8;
 }
 .xtr-foot-links {
   @apply flex flex-col items-center justify-center md:flex-row space-y-1.5 md:space-y-0 md:space-x-3;

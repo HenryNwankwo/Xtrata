@@ -3,6 +3,8 @@ import { Inter } from 'next/font/google';
 import { ChakraProviders } from '@/utils/ChakraProviders';
 import { poppins } from '@/utils/fonts';
 import { XtrataProvider } from '@/utils/XtrataContext';
+import Aside from '@/components/Aside';
+import MainBody from '@/components/MainBody';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -14,12 +16,19 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang='en'>
-      <body className={poppins.className || inter.className}>
-        <div className='bg-[url("/assets/img/bg2.jpg")] bg-cover bg-center bg-opacity-70'>
+      <body
+        className={`${
+          poppins.className || inter.className
+        } bg-[url("/assets/img/bg2.jpg")] bg-cover bg-center bg-opacity-70`}
+      >
+        <main className='xtr-main'>
           <XtrataProvider>
-            <ChakraProviders>{children}</ChakraProviders>
+            <ChakraProviders>
+              <Aside />
+              <MainBody>{children}</MainBody>
+            </ChakraProviders>
           </XtrataProvider>
-        </div>
+        </main>
       </body>
     </html>
   );
