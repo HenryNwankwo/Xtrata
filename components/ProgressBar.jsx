@@ -18,14 +18,12 @@ function ProgressBar({ progressText, progressValue }) {
   }
 
   return (
-    <div className='h-2 w-full bg-slate-100 relative'>
+    <div className='progress-bar'>
       <div
         className={`h-full ${progressColor}`}
         style={{ width: widthPercentage }}
       ></div>
-      <p className='text-[0.5rem] text-center w-full h-full absolute top-0 left-0 flex items-center justify-center'>
-        {progressText}
-      </p>
+      <p className='progress-bar_text'>{progressText}</p>
     </div>
   );
 }
