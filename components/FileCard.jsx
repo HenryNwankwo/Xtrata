@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { BsDownload } from 'react-icons/bs';
 import { LuFileInput } from 'react-icons/lu';
 
-function FileCard({ fileName }) {
+function FileCard({ fileName, fileCategory }) {
   return (
     <>
       {/*Start of File Card */}
@@ -23,19 +23,21 @@ function FileCard({ fileName }) {
         <Text fontSize={'xs'} px='2'>
           {fileName}
         </Text>
-        <HStack ml='auto'>
-          <button className='p-1 md:p-3 rounded-full hover:bg-slate-100'>
-            <LuFileInput />
-          </button>
-          <button className='p-1 md:p-3 rounded-full hover:bg-slate-100'>
-            <BsDownload />
-          </button>
-        </HStack>
+        {fileCategory === 'accepted' ? (
+          <HStack ml='auto'>
+            <button className='p-1 md:p-3 rounded-full hover:bg-slate-100'>
+              <LuFileInput />
+            </button>
+            <button className='p-1 md:p-3 rounded-full hover:bg-slate-100'>
+              <BsDownload />
+            </button>
+          </HStack>
+        ) : null}
         <CloseButton
           size={'md'}
           sx={{
             p: { base: '10px', md: '20px' },
-            ml: '0px',
+            ml: fileCategory === 'accepted' ? '0px' : 'auto',
             borderRadius: '100%',
             ':hover': {
               bg: 'gray.100',
