@@ -4,7 +4,7 @@ import FilesGroup from '@/components/FilesGroup';
 
 export default function Home() {
   return (
-    <section className='w-full flex flex-col justify-center items-center py-8 md:px-8'>
+    <section className='w-full h-auto flex flex-col justify-center items-center py-8 md:px-8'>
       <MyDropzone dropzoneStyles={'xtr-dropzone'}></MyDropzone>
       <FilesGroup></FilesGroup>
     </section>

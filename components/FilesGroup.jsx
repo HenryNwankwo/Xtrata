@@ -1,12 +1,15 @@
 'use client';
 import { useXtrataContext } from '@/utils/XtrataContext';
-import { Box, HStack, Heading, VStack } from '@chakra-ui/react';
-import { BsChevronDown, BsChevronUp } from 'react-icons/bs';
+import { Box, Heading, VStack } from '@chakra-ui/react';
+import { BsChevronDown, BsChevronUp, BsDownload } from 'react-icons/bs';
+import { LuFileInput } from 'react-icons/lu';
 import FilesGroupContainer from './FilesGroupContainer';
+import FileCard from './FileCard';
 
 function FilesGroup({ bgColor, titleColor, textColor }) {
   const fileGroupName = 'Accepted Files';
   const { isOpen, setIsOpen } = useXtrataContext();
+  const fileName = 'Jason.jpg';
 
   //Styings
   const filesGroupStyles = {
@@ -63,7 +66,10 @@ function FilesGroup({ bgColor, titleColor, textColor }) {
       </Box>
       {isOpen ? (
         <FilesGroupContainer>
-          <p>Put files here</p>
+          <FileCard fileName={fileName} />
+          <button className='mt-4 py-2 px-4 text-white w-full bg-green-500 hover:bg-green-400 md:w-40 md:rounded-full flex items-center justify-center'>
+            <LuFileInput className='mr-2' /> Extract All
+          </button>
         </FilesGroupContainer>
       ) : null}
     </VStack>

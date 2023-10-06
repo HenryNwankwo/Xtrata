@@ -15,6 +15,7 @@ function MainBody({ children }) {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
+        overflowY: 'auto',
       }}
     >
       {children}
