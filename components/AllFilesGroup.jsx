@@ -15,6 +15,7 @@ function AllFilesGroup() {
     setIsRejectedOpen,
     files,
     theRejectedFiles,
+    setTheRejectedFiles,
   } = useXtrataContext();
   return (
     <>
@@ -28,12 +29,12 @@ function AllFilesGroup() {
         <FilesGroupContainer>
           {files.length > 0 ? (
             <>
-              {files.map((file) => {
+              {files.map((file, index) => {
                 const fileExtension = file.name.toLowerCase().split('.')[1];
 
                 return (
                   <FileCard
-                    key={file.name}
+                    key={index}
                     fileName={file.name}
                     fileCategory={'accepted'}
                     imageSrc={
@@ -69,11 +70,11 @@ function AllFilesGroup() {
         <FilesGroupContainer>
           {theRejectedFiles.length > 0 ? (
             <>
-              {theRejectedFiles.map(({ file, errors }) => {
+              {theRejectedFiles.map(({ file, errors, index }) => {
                 const fileExtension = file.name.toLowerCase().split('.')[1];
                 return (
                   <FileCard
-                    key={file.name}
+                    key={index}
                     fileName={file.name}
                     imageSrc={
                       imgArray.includes(fileExtension)
@@ -85,8 +86,12 @@ function AllFilesGroup() {
                   />
                 );
               })}
-              <button className='mt-4 py-2 px-4 text-white w-full bg-red-500 hover:bg-red-400 md:w-40 md:rounded-full flex items-center justify-center'>
-                <RiDeleteBin5Line className='mr-2' /> Clear All
+              <button
+                className='mt-4 py-2 px-4 text-white w-full bg-red-500 hover:bg-red-400 md:w-40 md:rounded-full flex items-center justify-center'
+                onClick={() => setTheRejectedFiles([])}
+              >
+                <RiDeleteBin5Line className='mr-2' />
+                Clear All
               </button>
             </>
           ) : (
