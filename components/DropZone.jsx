@@ -1,11 +1,21 @@
 'use client';
+import { useXtrataContext } from '@/utils/XtrataContext';
 import { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 
 function MyDropzone({ dropzoneStyles }) {
+  const { files, setFiles } = useXtrataContext();
   const onDrop = useCallback((acceptedFiles) => {
+    if (acceptedFiles?.length) {
+      setFiles((prevFiles) => [
+        ...prevFiles,
+        ...acceptedFiles.map((file) =>
+          Object.assign(file, { preview: URL.createObjectURL(file) })
+        ),
+      ]);
+    }
     // Do something with the files
-    console.log(acceptedFiles);
+    console.log('This is the files: ', files);
   }, []);
   const { getRootProps, getInputProps, isDragActive, open } = useDropzone({
     onDrop,
