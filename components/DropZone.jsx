@@ -4,8 +4,8 @@ import { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 
 function MyDropzone({ dropzoneStyles }) {
-  const { files, setFiles } = useXtrataContext();
-  const onDrop = useCallback((acceptedFiles) => {
+  const { files, setFiles, setTheRejectedFiles } = useXtrataContext();
+  const onDrop = useCallback((acceptedFiles, rejectedFiles) => {
     if (acceptedFiles?.length) {
       setFiles((prevFiles) => [
         ...prevFiles,
@@ -13,15 +13,20 @@ function MyDropzone({ dropzoneStyles }) {
           Object.assign(file, { preview: URL.createObjectURL(file) })
         ),
       ]);
-      console.log('This is the files: ', files);
     }
-    // Do something with the files
-    console.log('This is the accepted files: ', acceptedFiles);
+    // rejected files
+    if (rejectedFiles?.length) {
+      setTheRejectedFiles((prevFiles) => [...prevFiles, ...rejectedFiles]);
+      console.log('the rejected files: ', rejectedFiles);
+    }
   }, []);
   const { getRootProps, getInputProps, isDragActive, open } = useDropzone({
     onDrop,
     noClick: true,
     noKeyboard: true,
+    accept: {
+      'text/*': [],
+    },
   });
 
   return (

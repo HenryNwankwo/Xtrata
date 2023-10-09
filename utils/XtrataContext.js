@@ -8,6 +8,7 @@ export const XtrataProvider = ({ children }) => {
   const [isAcceptedOpen, setIsAcceptedOpen] = useState(false);
   const [isRejectedOpen, setIsRejectedOpen] = useState(false);
   const [files, setFiles] = useState([]);
+  const [theRejectedFiles, setTheRejectedFiles] = useState([]);
 
   //The object values of the provider
   const providerValues = {
@@ -19,6 +20,8 @@ export const XtrataProvider = ({ children }) => {
     setIsRejectedOpen,
     files,
     setFiles,
+    theRejectedFiles,
+    setTheRejectedFiles,
   };
 
   return (

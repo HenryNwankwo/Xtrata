@@ -14,6 +14,7 @@ function AllFilesGroup() {
     setIsAcceptedOpen,
     setIsRejectedOpen,
     files,
+    theRejectedFiles,
   } = useXtrataContext();
   return (
     <>
@@ -66,10 +67,33 @@ function AllFilesGroup() {
         toggleOpen={() => setIsRejectedOpen((prev) => !prev)}
       >
         <FilesGroupContainer>
-          <FileCard fileName={''} fileCategory={'rejected'} />
-          <button className='mt-4 py-2 px-4 text-white w-full bg-red-500 hover:bg-red-400 md:w-40 md:rounded-full flex items-center justify-center'>
-            <RiDeleteBin5Line className='mr-2' /> Clear All
-          </button>
+          {theRejectedFiles.length > 0 ? (
+            <>
+              {theRejectedFiles.map(({ file, errors }) => {
+                const fileExtension = file.name.toLowerCase().split('.')[1];
+                return (
+                  <FileCard
+                    key={file.name}
+                    fileName={file.name}
+                    imageSrc={
+                      imgArray.includes(fileExtension)
+                        ? file.preview
+                        : imageConfig[fileExtension] || imageConfig['default']
+                    }
+                    onLoadHandler={() => URL.revokeObjectURL(file?.preview)}
+                    fileCategory={'rejected'}
+                  />
+                );
+              })}
+              <button className='mt-4 py-2 px-4 text-white w-full bg-red-500 hover:bg-red-400 md:w-40 md:rounded-full flex items-center justify-center'>
+                <RiDeleteBin5Line className='mr-2' /> Clear All
+              </button>
+            </>
+          ) : (
+            <p className='text-sm text-center w-full py-2 px-4'>
+              No Rejected files yet!
+            </p>
+          )}
         </FilesGroupContainer>
       </FilesGroup>
     </>
