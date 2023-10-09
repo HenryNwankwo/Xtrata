@@ -13,9 +13,10 @@ function MyDropzone({ dropzoneStyles }) {
           Object.assign(file, { preview: URL.createObjectURL(file) })
         ),
       ]);
+      console.log('This is the files: ', files);
     }
     // Do something with the files
-    console.log('This is the files: ', files);
+    console.log('This is the accepted files: ', acceptedFiles);
   }, []);
   const { getRootProps, getInputProps, isDragActive, open } = useDropzone({
     onDrop,

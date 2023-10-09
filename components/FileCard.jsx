@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { BsDownload } from 'react-icons/bs';
 import { LuFileInput } from 'react-icons/lu';
 
-function FileCard({ fileName, fileCategory }) {
+function FileCard({ imageSrc, fileName, fileCategory, onLoadHandler }) {
   return (
     <>
       {/*Start of File Card */}
@@ -13,28 +13,44 @@ function FileCard({ fileName, fileCategory }) {
         sx={{
           w: '100%',
           bg: 'whiteAlpha.800',
-          borderRadius: '10px',
+          borderRadius: { sm: '10px' },
           h: 'auto',
           px: '15px',
           py: '8px',
         }}
       >
-        <Image src='' alt='' width={30} height={30} />
-        <Text fontSize={'xs'} px='2'>
+        <Image
+          src={imageSrc}
+          alt={fileName}
+          width={30}
+          height={30}
+          onLoad={onLoadHandler}
+        />
+        <Text
+          sx={{
+            fontSize: 'xs',
+            px: '2px',
+            mr: '6px',
+            w: { sm: 'fit-content' },
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+          }}
+        >
           {fileName}
         </Text>
         {fileCategory === 'accepted' ? (
           <HStack ml='auto'>
             <button className='p-1 md:p-3 rounded-full hover:bg-slate-100'>
-              <LuFileInput />
+              <LuFileInput className='text-lg md:text-2xl' />
             </button>
             <button className='p-1 md:p-3 rounded-full hover:bg-slate-100'>
-              <BsDownload />
+              <BsDownload className='text-lg md:text-2xl' />
             </button>
           </HStack>
         ) : null}
         <CloseButton
-          size={'md'}
+          size={{ base: 'sm', md: 'md' }}
           sx={{
             p: { base: '10px', md: '20px' },
             ml: fileCategory === 'accepted' ? '0px' : 'auto',

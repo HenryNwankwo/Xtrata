@@ -6,11 +6,11 @@ function FilesGroupContainer({ children }) {
     w: '100%',
     h: 'auto',
     maxHeight: 'fit-content',
-    px: '15px',
+    px: { sm: '15px' },
     py: '25px',
     bg: 'whiteAlpha.700',
     backdropBlur: '12px',
-    borderRadius: '20px',
+    borderRadius: { md: '20px' },
   };
   return (
     <VStack as={'aside'} sx={filesGroupContainerStyles}>
