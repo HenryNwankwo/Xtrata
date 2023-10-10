@@ -4,7 +4,13 @@ import Image from 'next/image';
 import { BsDownload } from 'react-icons/bs';
 import { LuFileInput } from 'react-icons/lu';
 
-function FileCard({ imageSrc, fileName, fileCategory, onLoadHandler }) {
+function FileCard({
+  imageSrc,
+  fileName,
+  fileCategory,
+  onLoadHandler,
+  removeFile,
+}) {
   return (
     <>
       {/*Start of File Card */}
@@ -59,6 +65,7 @@ function FileCard({ imageSrc, fileName, fileCategory, onLoadHandler }) {
               bg: 'gray.100',
             },
           }}
+          onClick={removeFile}
         />
       </HStack>
     </>

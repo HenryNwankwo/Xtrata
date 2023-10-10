@@ -16,8 +16,15 @@ function MyDropzone({ dropzoneStyles }) {
     }
     // rejected files
     if (rejectedFiles?.length) {
-      setTheRejectedFiles((prevFiles) => [...prevFiles, ...rejectedFiles]);
-      console.log('the rejected files: ', rejectedFiles);
+      setTheRejectedFiles((prevFiles) => [
+        ...prevFiles,
+        ...rejectedFiles.map(({ file, errors }) => ({
+          file: Object.assign(file, { preview: URL.createObjectURL(file) }),
+          errors: errors,
+        })),
+      ]);
+      console.log('the accepted files: ', acceptedFiles);
+      //console.log('the rejected files: ', rejectedFiles);
     }
   }, []);
   const { getRootProps, getInputProps, isDragActive, open } = useDropzone({

@@ -16,7 +16,23 @@ function AllFilesGroup() {
     files,
     theRejectedFiles,
     setTheRejectedFiles,
+    setFiles,
   } = useXtrataContext();
+
+  //Removing accepted files
+  const removeAccepted = (id) => {
+    const newFiles = files.filter((file, index) => index !== id);
+    setFiles(newFiles);
+  };
+
+  //removing rejected files
+  const removeRejected = (id) => {
+    const newRejectedFiles = theRejectedFiles.filter(
+      (file, index) => index !== id
+    );
+    setTheRejectedFiles(newRejectedFiles);
+  };
+
   return (
     <>
       {/* Accepted files section */}
@@ -43,6 +59,7 @@ function AllFilesGroup() {
                         : imageConfig[fileExtension] || imageConfig['default']
                     }
                     onLoadHandler={() => URL.revokeObjectURL(file?.preview)}
+                    removeFile={() => removeAccepted(index)}
                   />
                 );
               })}
@@ -70,7 +87,7 @@ function AllFilesGroup() {
         <FilesGroupContainer>
           {theRejectedFiles.length > 0 ? (
             <>
-              {theRejectedFiles.map(({ file, errors, index }) => {
+              {theRejectedFiles.map(({ file, errors }, index) => {
                 const fileExtension = file.name.toLowerCase().split('.')[1];
                 return (
                   <FileCard
@@ -83,6 +100,7 @@ function AllFilesGroup() {
                     }
                     onLoadHandler={() => URL.revokeObjectURL(file?.preview)}
                     fileCategory={'rejected'}
+                    removeFile={() => removeRejected(index)}
                   />
                 );
               })}
