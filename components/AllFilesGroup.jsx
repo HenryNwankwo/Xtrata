@@ -27,6 +27,11 @@ function AllFilesGroup() {
 
   //removing rejected files
   const removeRejected = (id) => {
+    const newRejectedFiles = [...theRejectedFiles]; // Create a copy of the array
+    newRejectedFiles.splice(id, 1); // Remove the item at the specified index
+    setTheRejectedFiles(newRejectedFiles);
+  };
+  const removeRejecte = (id) => {
     const newRejectedFiles = theRejectedFiles.filter(
       (file, index) => index !== id
     );

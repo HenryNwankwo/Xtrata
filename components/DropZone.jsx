@@ -23,8 +23,6 @@ function MyDropzone({ dropzoneStyles }) {
           errors: errors,
         })),
       ]);
-      console.log('the accepted files: ', acceptedFiles);
-      //console.log('the rejected files: ', rejectedFiles);
     }
   }, []);
   const { getRootProps, getInputProps, isDragActive, open } = useDropzone({
