@@ -10,6 +10,7 @@ function FileCard({
   fileCategory,
   onLoadHandler,
   removeFile,
+  extractFile,
 }) {
   return (
     <>
@@ -47,7 +48,10 @@ function FileCard({
         </Text>
         {fileCategory === 'accepted' ? (
           <HStack ml='auto'>
-            <button className='p-1 md:p-3 rounded-full hover:bg-slate-100'>
+            <button
+              className='p-1 md:p-3 rounded-full hover:bg-slate-100'
+              onClick={extractFile}
+            >
               <LuFileInput className='text-lg md:text-2xl' />
             </button>
             <button className='p-1 md:p-3 rounded-full hover:bg-slate-100'>
