@@ -10,7 +10,7 @@ function FileCard({
   fileCategory,
   onLoadHandler,
   removeFile,
-  extractFile,
+  downloadHandler,
 }) {
   return (
     <>
@@ -46,31 +46,28 @@ function FileCard({
         >
           {fileName}
         </Text>
-        {fileCategory === 'accepted' ? (
-          <HStack ml='auto'>
+        <HStack ml='auto'>
+          {fileCategory === 'downloadable' ? (
             <button
-              className='p-1 md:p-3 rounded-full hover:bg-slate-100'
-              onClick={extractFile}
+              className='p-1 md:p-3 rounded-full hover:bg-slate-100 mr-1'
+              onClick={downloadHandler}
             >
-              <LuFileInput className='text-lg md:text-2xl' />
+              <BsDownload className='text-lg md:text-xl' />
             </button>
-            <button className='p-1 md:p-3 rounded-full hover:bg-slate-100'>
-              <BsDownload className='text-lg md:text-2xl' />
-            </button>
-          </HStack>
-        ) : null}
-        <CloseButton
-          size={{ base: 'sm', md: 'md' }}
-          sx={{
-            p: { base: '10px', md: '20px' },
-            ml: fileCategory === 'accepted' ? '0px' : 'auto',
-            borderRadius: '100%',
-            ':hover': {
-              bg: 'gray.100',
-            },
-          }}
-          onClick={removeFile}
-        />
+          ) : null}
+          <CloseButton
+            size={{ base: 'sm', md: 'md' }}
+            sx={{
+              p: { base: '10px', md: '20px' },
+              ml: 'auto',
+              borderRadius: '100%',
+              ':hover': {
+                bg: 'gray.100',
+              },
+            }}
+            onClick={removeFile}
+          />
+        </HStack>
       </HStack>
     </>
   );

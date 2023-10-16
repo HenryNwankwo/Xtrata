@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { v4 as uuidv4 } from 'uuid';
 
-export default async (req, res) => {
+export const POST = async (req, res) => {
   if (req.method === 'POST') {
     try {
       const { filename, fileContent } = req.body;
@@ -11,7 +11,7 @@ export default async (req, res) => {
         process.cwd(),
         'public',
         'downloads',
-        `${filename}${uniqueId}.txt`
+        `${uniqueId}.txt`
       );
 
       fs.writeFileSync(filePath, fileContent.join('\n'));

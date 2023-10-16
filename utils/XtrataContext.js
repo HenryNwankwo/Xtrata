@@ -10,8 +10,9 @@ export const XtrataProvider = ({ children }) => {
   const [files, setFiles] = useState([]);
   const [theRejectedFiles, setTheRejectedFiles] = useState([]);
   const [filteredLines, setFilteredLines] = useState([]);
-  const [characterLimit, setCharacterLimit] = useState(15);
+  const [characterLimit, setCharacterLimit] = useState(160);
   const [groupFilteredLines, setGroupFilteredLines] = useState([]);
+  const [extractedFiles, setExtractedFiles] = useState([]);
   //The object values of the provider
   const providerValues = {
     isMenuOpen,
@@ -24,12 +25,10 @@ export const XtrataProvider = ({ children }) => {
     setFiles,
     theRejectedFiles,
     setTheRejectedFiles,
-    filteredLines,
-    setFilteredLines,
     characterLimit,
     setCharacterLimit,
-    groupFilteredLines,
-    setGroupFilteredLines,
+    extractedFiles,
+    setExtractedFiles,
   };
 
   return (

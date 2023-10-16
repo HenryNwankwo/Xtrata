@@ -5,8 +5,14 @@ import FilesGroupContainer from './FilesGroupContainer';
 import { RiDeleteBin5Line } from 'react-icons/ri';
 import { useXtrataContext } from '@/utils/XtrataContext';
 import { imageConfig } from '@/utils/imageConfig';
+import { useRouter } from 'next/navigation';
+import { v4 as uuidv4 } from 'uuid';
+import { saveAs } from 'file-saver';
+import useLocalStorage from '@/utils/useLocalStorage';
 
 function AllFilesGroup() {
+  const router = useRouter();
+  const uniqueId = uuidv4();
   const imgArray = ['png', 'jpg', 'gif', 'svg', 'jpeg'];
   const {
     isAcceptedOpen,
@@ -17,12 +23,9 @@ function AllFilesGroup() {
     theRejectedFiles,
     setTheRejectedFiles,
     setFiles,
-    filteredLines,
-    setFilteredLines,
     characterLimit,
-    setCharacterLimit,
-    groupFilteredLines,
-    setGroupFilteredLines,
+    extractedFiles,
+    setExtractedFiles,
   } = useXtrataContext();
 
   //Removing accepted files
@@ -37,56 +40,49 @@ function AllFilesGroup() {
     newRejectedFiles.splice(id, 1); // Remove the item at the specified index
     setTheRejectedFiles(newRejectedFiles);
   };
-  const removeRejecte = (id) => {
-    const newRejectedFiles = theRejectedFiles.filter(
-      (file, index) => index !== id
-    );
-    setTheRejectedFiles(newRejectedFiles);
+
+  //A function that extract lines from a file
+  const extractLines = (file, limit = 160) => {
+    const lines = file.split('\n');
+    const extractedLines = lines.filter((line) => line.length <= limit);
+    return extractedLines.join('\n');
   };
 
-  //extracting a single file
-  const fileExtraction = (files, fileIndex) => {
-    const reader = new FileReader();
-    reader.onload = async (event) => {
-      const content = event.target.result;
-      const lines = content.split('\n');
-      const filteredLines = lines.filter(
-        (line) => line.length <= characterLimit
-      );
-      setFilteredLines(filteredLines);
-      console.log('Filterd lines => ', filteredLines.join('\n'));
-    };
-    reader.readAsText(files[fileIndex]);
+  // individual file download or saving
+  const downloadFile = (file, name) => {
+    saveAs(file, name);
   };
 
-  //extracting all files
-  const extractAllHandler = async (files) => {
-    console.log('EXT FILES; ', files);
-
-    //Handling each file reading
-    const handleFile = async (file) => {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = (evt) => {
-          const content = evt.target.result;
-          const lines = content.split('\n');
-          const allFilteredLines = lines.filter(
-            (line) => line.length <= characterLimit
-          );
-
-          resolve({ filename: file.name, fileContent: allFilteredLines });
+  //Reading and extracting each files
+  const extractAllHandler = (files, limit) => {
+    const filesPromises = files.map((file) => {
+      const theFileName = file.name.split('.')[0];
+      const reader = new FileReader();
+      return new Promise((resolve) => {
+        reader.onload = () => {
+          const extractedContent = extractLines(reader.result, limit);
+          const extractedFile = new Blob([extractedContent], {
+            type: 'text/plain',
+          });
+          const fileName = `${theFileName}_xtr${uniqueId}.txt`;
+          resolve({
+            file: extractedFile,
+            name: fileName,
+          });
         };
+
         reader.readAsText(file);
       });
-    };
-    //looping through and reading each file
-    for (const file of files) {
-      const result = await handleFile(file);
-      setGroupFilteredLines((prevFiles) => [...prevFiles, result]);
+    });
 
-      console.log('groupFilteredLines => ', groupFilteredLines);
-    }
+    Promise.all(filesPromises).then((extractedData) => {
+      setExtractedFiles(extractedData);
+
+      console.log('Extracted data: ', extractedData);
+    });
+    router.push('/extracted');
   };
+
   return (
     <>
       {/* Accepted files section */}
@@ -114,13 +110,13 @@ function AllFilesGroup() {
                     }
                     onLoadHandler={() => URL.revokeObjectURL(file?.preview)}
                     removeFile={() => removeAccepted(index)}
-                    extractFile={() => fileExtraction(files, index)}
+                    downloadHandler={() => downloadFile(file.file, file.name)}
                   />
                 );
               })}
               <button
                 className='mt-4 py-2 px-4 text-white w-full bg-green-500 hover:bg-green-400 md:w-40 md:rounded-full flex items-center justify-center'
-                onClick={() => extractAllHandler(files)}
+                onClick={() => extractAllHandler(files, characterLimit)}
               >
                 <LuFileInput className='mr-2' /> Extract All
               </button>
