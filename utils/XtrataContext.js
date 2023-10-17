@@ -15,6 +15,9 @@ export const XtrataProvider = ({ children }) => {
   const [partBFiles, setPartBFiles] = useState([]);
   const [partBRejectedFiles, setPartBRejectedFiles] = useState([]);
   const [extractedFiles, setExtractedFiles] = useState([]);
+  const [allAcceptedOpen, setAllAcceptedOpen] = useState(false);
+  const [allFiles, setAllFiles] = useState([]);
+  const [allRejectedOpen, setAllRejectedOpen] = useState(false);
   //The object values of the provider
   const providerValues = {
     isMenuOpen,
@@ -39,6 +42,12 @@ export const XtrataProvider = ({ children }) => {
     setPartBFiles,
     partBRejectedFiles,
     setPartBRejectedFiles,
+    allAcceptedOpen,
+    setAllAcceptedOpen,
+    allFiles,
+    setAllFiles,
+    allRejectedOpen,
+    setAllRejectedOpen,
   };
 
   return (
