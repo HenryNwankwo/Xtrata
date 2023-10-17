@@ -1,7 +1,7 @@
-import React from 'react';
+import GroupedDropzone from '@/components/GroupedDropzone';
 
 function page() {
-  return <div>Checker</div>;
+  return <GroupedDropzone></GroupedDropzone>;
 }
 
 export default page;

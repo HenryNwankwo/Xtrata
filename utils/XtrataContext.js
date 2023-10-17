@@ -9,9 +9,11 @@ export const XtrataProvider = ({ children }) => {
   const [isRejectedOpen, setIsRejectedOpen] = useState(false);
   const [files, setFiles] = useState([]);
   const [theRejectedFiles, setTheRejectedFiles] = useState([]);
-  const [filteredLines, setFilteredLines] = useState([]);
+  const [partAFiles, setPartAFiles] = useState([]);
+  const [partARejectedFiles, setPartARejectedFiles] = useState([]);
   const [characterLimit, setCharacterLimit] = useState(160);
-  const [groupFilteredLines, setGroupFilteredLines] = useState([]);
+  const [partBFiles, setPartBFiles] = useState([]);
+  const [partBRejectedFiles, setPartBRejectedFiles] = useState([]);
   const [extractedFiles, setExtractedFiles] = useState([]);
   //The object values of the provider
   const providerValues = {
@@ -29,6 +31,14 @@ export const XtrataProvider = ({ children }) => {
     setCharacterLimit,
     extractedFiles,
     setExtractedFiles,
+    partAFiles,
+    setPartAFiles,
+    partARejectedFiles,
+    setPartARejectedFiles,
+    partBFiles,
+    setPartBFiles,
+    partBRejectedFiles,
+    setPartBRejectedFiles,
   };
 
   return (

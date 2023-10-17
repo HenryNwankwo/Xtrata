@@ -9,8 +9,11 @@ import { useXtrataContext } from '@/utils/XtrataContext';
 import FileCard from '@/components/FileCard';
 import FilesGroupContainer from '@/components/FilesGroupContainer';
 
-FilesGroupContainer;
 function page() {
+  const date = new Date();
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
+  const seconds = date.getSeconds();
   const { extractedFiles, setExtractedFiles } = useXtrataContext();
 
   const imgArray = ['png', 'jpg', 'gif', 'svg', 'jpeg'];
@@ -34,10 +37,17 @@ function page() {
     });
 
     zip.generateAsync({ type: 'blob' }).then((content) => {
-      saveAs(content, 'xtr_files.zip');
+      saveAs(content, `xtr-files-${hours}_${minutes}_${seconds}.zip`);
     });
   };
 
+  //Removing an extracted file
+  const removeExtracted = (id) => {
+    const newExtractedFiles = extractedFiles.filter(
+      (file, index) => id !== index
+    );
+    setExtractedFiles(newExtractedFiles);
+  };
   return (
     <section className='w-full h-auto flex flex-col justify-center items-center py-8 md:px-8'>
       <p className='w-full py-3 text-center text-2xl'>Extracted Files</p>
@@ -59,17 +69,19 @@ function page() {
                       : imageConfig[fileExtension] || imageConfig['default']
                   }
                   onLoadHandler={() => URL.revokeObjectURL(file?.preview)}
-                  removeFile={() => removeAccepted(index)}
+                  removeFile={() => removeExtracted(index)}
                   downloadHandler={() => downloadFile(file.file, file.name)}
                 />
               );
             })}
-            <button
-              className='mt-4 py-2 px-4 text-white w-full bg-green-500 hover:bg-green-400 md:w-44 md:rounded-full flex items-center justify-center'
-              onClick={downloadAllFiles}
-            >
-              <BsDownload className='text-lg mr-2' /> Download All
-            </button>
+            {extractedFiles?.length > 1 ? (
+              <button
+                className='mt-4 py-2 px-4 text-white w-full bg-green-500 hover:bg-green-400 md:w-44 md:rounded-full flex items-center justify-center'
+                onClick={downloadAllFiles}
+              >
+                <BsDownload className='text-lg mr-2' /> Download All
+              </button>
+            ) : null}
           </>
         ) : (
           <p className='text-sm text-center w-full py-2 px-4'>

@@ -3,8 +3,7 @@ import { useXtrataContext } from '@/utils/XtrataContext';
 import { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 
-function MyDropzone({ dropzoneStyles }) {
-  const { files, setFiles, setTheRejectedFiles } = useXtrataContext();
+function MyDropzone({ dropzoneStyles, setFiles, setTheRejectedFiles }) {
   const onDrop = useCallback((acceptedFiles, rejectedFiles) => {
     if (acceptedFiles?.length) {
       setFiles((prevFiles) => [
