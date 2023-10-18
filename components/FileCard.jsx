@@ -11,6 +11,7 @@ function FileCard({
   onLoadHandler,
   removeFile,
   downloadHandler,
+  showDelete = true,
 }) {
   return (
     <>
@@ -22,6 +23,7 @@ function FileCard({
           bg: 'whiteAlpha.800',
           borderRadius: { sm: '10px' },
           h: 'auto',
+          minH: '60px',
           px: '15px',
           py: '8px',
         }}
@@ -55,18 +57,20 @@ function FileCard({
               <BsDownload className='text-lg md:text-xl' />
             </button>
           ) : null}
-          <CloseButton
-            size={{ base: 'sm', md: 'md' }}
-            sx={{
-              p: { base: '10px', md: '20px' },
-              ml: 'auto',
-              borderRadius: '100%',
-              ':hover': {
-                bg: 'gray.100',
-              },
-            }}
-            onClick={removeFile}
-          />
+          {showDelete && (
+            <CloseButton
+              size={{ base: 'sm', md: 'md' }}
+              sx={{
+                p: { base: '10px', md: '20px' },
+                ml: 'auto',
+                borderRadius: '100%',
+                ':hover': {
+                  bg: 'gray.100',
+                },
+              }}
+              onClick={removeFile}
+            />
+          )}
         </HStack>
       </HStack>
     </>

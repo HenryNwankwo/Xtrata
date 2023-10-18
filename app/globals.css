@@ -28,7 +28,7 @@
 }
 
 .xtr-grouped-check-files {
-  @apply flex flex-col h-auto w-full md:w-[47%] items-center justify-between;
+  @apply flex flex-col h-auto w-full md:w-[47%] items-center justify-between mb-auto;
 }
 .xtr-grouped-check-files > * {
   @apply mt-2;

@@ -1,5 +1,5 @@
 'use client';
-import { LuFileInput } from 'react-icons/lu';
+import { AiOutlineFileSearch } from 'react-icons/ai';
 import FileCard from './FileCard';
 import FilesGroup from './FilesGroup';
 import FilesGroupContainer from './FilesGroupContainer';
@@ -30,6 +30,12 @@ function GroupedAllFiles() {
     allRejectedOpen,
     setAllRejectedOpen,
   } = useXtrataContext();
+
+  //For removal of a file
+  const removeFile = (fileIndex, fileArray, setFileArray) => {
+    const newFileArray = fileArray.filter((file, index) => index !== fileIndex);
+    setFileArray(newFileArray);
+  };
 
   return (
     <>
@@ -63,7 +69,9 @@ function GroupedAllFiles() {
                               imageConfig['default']
                         }
                         onLoadHandler={() => URL.revokeObjectURL(file?.preview)}
-                        removeFile={() => removeAccepted(index)}
+                        removeFile={() =>
+                          removeFile(index, partAFiles, setPartAFiles)
+                        }
                         downloadHandler={() =>
                           downloadFile(file.file, file.name)
                         }
@@ -90,7 +98,9 @@ function GroupedAllFiles() {
                               imageConfig['default']
                         }
                         onLoadHandler={() => URL.revokeObjectURL(file?.preview)}
-                        removeFile={() => removeAccepted(index)}
+                        removeFile={() =>
+                          removeFile(index, partBFiles, setPartBFiles)
+                        }
                         downloadHandler={() =>
                           downloadFile(file.file, file.name)
                         }
@@ -103,7 +113,7 @@ function GroupedAllFiles() {
                 className='mt-4 py-2 px-4 text-white w-full bg-green-500 hover:bg-green-400 md:w-52 md:rounded-full flex items-center justify-center'
                 onClick={''}
               >
-                <LuFileInput className='mr-2' /> Search and check
+                <AiOutlineFileSearch className='mr-2' /> Search and check
               </button>
             </>
           ) : (
@@ -140,13 +150,17 @@ function GroupedAllFiles() {
                       }
                       onLoadHandler={() => URL.revokeObjectURL(file?.preview)}
                       fileCategory={'rejected'}
+                      showDelete={false}
                     />
                   );
                 }
               )}
               <button
                 className='mt-4 py-2 px-4 text-white w-full bg-red-500 hover:bg-red-400 md:w-40 md:rounded-full flex items-center justify-center'
-                onClick={() => setTheRejectedFiles([])}
+                onClick={() => {
+                  setPartARejectedFiles([]);
+                  setPartBRejectedFiles([]);
+                }}
               >
                 <RiDeleteBin5Line className='mr-2' />
                 Clear All
