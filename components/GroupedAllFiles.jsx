@@ -44,7 +44,10 @@ function GroupedAllFiles() {
           {[...partAFiles, ...partBFiles].length > 0 ? (
             <>
               <div className='w-full h-auto flex flex-col md:flex-row justify-between items-center'>
-                <article>
+                <article className='xtr-grouped-check-files'>
+                  <h3 className='w-full -mb-0.5 rounded-t-full py-2 px-4 text-center text-white bg-orange-600'>
+                    Files to be checked
+                  </h3>
                   {partAFiles.map((file, index) => {
                     const fileExtension = file.name.toLowerCase().split('.')[1];
 
@@ -68,7 +71,10 @@ function GroupedAllFiles() {
                     );
                   })}
                 </article>
-                <article>
+                <article className='xtr-grouped-check-files mt-3 md:mt-0'>
+                  <h3 className='w-full -mb-0.5 rounded-t-full py-2 px-4 text-center text-white bg-blue-950 '>
+                    Files for searching
+                  </h3>
                   {partBFiles.map((file, index) => {
                     const fileExtension = file.name.toLowerCase().split('.')[1];
 
@@ -94,7 +100,7 @@ function GroupedAllFiles() {
                 </article>
               </div>
               <button
-                className='mt-4 py-2 px-4 text-white w-full bg-green-500 hover:bg-green-400 md:w-40 md:rounded-full flex items-center justify-center'
+                className='mt-4 py-2 px-4 text-white w-full bg-green-500 hover:bg-green-400 md:w-52 md:rounded-full flex items-center justify-center'
                 onClick={''}
               >
                 <LuFileInput className='mr-2' /> Search and check
