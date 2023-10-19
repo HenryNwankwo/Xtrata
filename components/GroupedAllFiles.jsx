@@ -51,9 +51,11 @@ function GroupedAllFiles() {
             <>
               <div className='w-full h-auto flex flex-col md:flex-row justify-between items-center'>
                 <article className='xtr-grouped-check-files'>
-                  <h3 className='w-full -mb-0.5 rounded-t-full py-2 px-4 text-center text-white bg-orange-600'>
-                    Files to be checked
-                  </h3>
+                  {partAFiles.length > 0 ? (
+                    <h3 className='w-full -mb-0.5 rounded-t-full py-2 px-4 text-center text-white bg-orange-600'>
+                      Files to be checked
+                    </h3>
+                  ) : null}
                   {partAFiles.map((file, index) => {
                     const fileExtension = file.name.toLowerCase().split('.')[1];
 
@@ -80,9 +82,11 @@ function GroupedAllFiles() {
                   })}
                 </article>
                 <article className='xtr-grouped-check-files mt-3 md:mt-0'>
-                  <h3 className='w-full -mb-0.5 rounded-t-full py-2 px-4 text-center text-white bg-blue-950 '>
-                    Files for searching
-                  </h3>
+                  {partBFiles.length > 0 ? (
+                    <h3 className='w-full -mb-0.5 rounded-t-full py-2 px-4 text-center text-white bg-blue-950 '>
+                      Files for searching
+                    </h3>
+                  ) : null}
                   {partBFiles.map((file, index) => {
                     const fileExtension = file.name.toLowerCase().split('.')[1];
 

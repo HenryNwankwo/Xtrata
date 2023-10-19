@@ -26,6 +26,7 @@ function AllFilesGroup() {
     characterLimit,
     extractedFiles,
     setExtractedFiles,
+    setProgress,
   } = useXtrataContext();
 
   //Removing accepted files
@@ -59,6 +60,12 @@ function AllFilesGroup() {
       const theFileName = file.name.split('.')[0];
       const reader = new FileReader();
       return new Promise((resolve) => {
+        reader.onprogress = (event) => {
+          if (event.lengthComputable) {
+            const percent = (event.loaded / event.total) * 100;
+            setProgress(percent);
+          }
+        };
         reader.onload = () => {
           const extractedContent = extractLines(reader.result, limit);
           const extractedFile = new Blob([extractedContent], {
@@ -75,12 +82,18 @@ function AllFilesGroup() {
       });
     });
 
-    Promise.all(filesPromises).then((extractedData) => {
-      setExtractedFiles(extractedData);
-
-      console.log('Extracted data: ', extractedData);
-    });
-    router.push('/extracted');
+    Promise.all(filesPromises)
+      .then((extractedData) => {
+        setExtractedFiles(extractedData);
+        setProgress(100);
+        console.log('Extracted data: ', extractedData);
+        router.push('/extracted');
+        setProgress(0);
+      })
+      .catch((err) => {
+        console.log('Error extracting files: ', err);
+        setProgress(0);
+      });
   };
 
   return (

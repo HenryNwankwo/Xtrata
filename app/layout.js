@@ -5,6 +5,7 @@ import { poppins } from '@/utils/fonts';
 import { XtrataProvider } from '@/utils/XtrataContext';
 import Aside from '@/components/Aside';
 import MainBody from '@/components/MainBody';
+import ProgressGroup from '@/components/ProgressGroup';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -24,6 +25,7 @@ export default function RootLayout({ children }) {
         <main className='xtr-main'>
           <XtrataProvider>
             <ChakraProviders>
+              <ProgressGroup />
               <Aside />
               <MainBody>{children}</MainBody>
             </ChakraProviders>

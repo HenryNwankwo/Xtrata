@@ -1,5 +1,5 @@
 'use client';
-import ProgressBar from '@/components/ProgressBar';
+
 import MyDropzone from '@/components/DropZone';
 import AllFilesGroup from '@/components/AllFilesGroup';
 import { useXtrataContext } from '@/utils/XtrataContext';
