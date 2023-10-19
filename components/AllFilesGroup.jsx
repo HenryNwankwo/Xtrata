@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation';
 import { v4 as uuidv4 } from 'uuid';
 import { saveAs } from 'file-saver';
 import useLocalStorage from '@/utils/useLocalStorage';
+import Spinner from './Spinner';
 
 function AllFilesGroup() {
   const router = useRouter();
@@ -27,6 +28,10 @@ function AllFilesGroup() {
     extractedFiles,
     setExtractedFiles,
     setProgress,
+    extracting,
+    setExtracting,
+    searching,
+    setSearching,
   } = useXtrataContext();
 
   //Removing accepted files
@@ -56,6 +61,7 @@ function AllFilesGroup() {
 
   //Reading and extracting each files
   const extractAllHandler = (files, limit) => {
+    setExtracting((prev) => (prev === false ? true : prev));
     const filesPromises = files.map((file) => {
       const theFileName = file.name.split('.')[0];
       const reader = new FileReader();
@@ -86,13 +92,14 @@ function AllFilesGroup() {
       .then((extractedData) => {
         setExtractedFiles(extractedData);
         setProgress(100);
-        console.log('Extracted data: ', extractedData);
         router.push('/extracted');
         setProgress(0);
+        setExtracting((prev) => (prev === true ? false : prev));
       })
       .catch((err) => {
         console.log('Error extracting files: ', err);
         setProgress(0);
+        setExtracting((prev) => (prev === true ? false : prev));
       });
   };
 
@@ -130,8 +137,19 @@ function AllFilesGroup() {
               <button
                 className='mt-4 py-2 px-4 text-white w-full bg-green-500 hover:bg-green-400 md:w-40 md:rounded-full flex items-center justify-center'
                 onClick={() => extractAllHandler(files, characterLimit)}
+                disabled={extracting}
               >
-                <LuFileInput className='mr-2' /> Extract All
+                {extracting ? (
+                  <Spinner
+                    colorValue={'white'}
+                    loadingValue={extracting}
+                    sizeValue={20}
+                  />
+                ) : (
+                  <>
+                    <LuFileInput className='mr-2' /> Extract All
+                  </>
+                )}
               </button>
             </>
           ) : (
