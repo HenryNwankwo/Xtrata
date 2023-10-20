@@ -113,6 +113,9 @@ function AllFilesGroup() {
         toggleOpen={() => setIsAcceptedOpen((prev) => !prev)}
       >
         <FilesGroupContainer>
+          {files.length > 0
+            ? setIsAcceptedOpen((prev) => (prev === false ? true : prev))
+            : null}
           {files.length > 0 ? (
             <>
               {files.map((file, index) => {
@@ -170,6 +173,9 @@ function AllFilesGroup() {
         toggleOpen={() => setIsRejectedOpen((prev) => !prev)}
       >
         <FilesGroupContainer>
+          {theRejectedFiles.length > 0
+            ? setIsRejectedOpen((prev) => (prev === false ? true : prev))
+            : null}
           {theRejectedFiles.length > 0 ? (
             <>
               {theRejectedFiles.map(({ file, errors }, index) => {

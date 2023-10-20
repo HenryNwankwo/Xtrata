@@ -9,6 +9,7 @@ import { imageConfig } from '@/utils/imageConfig';
 import { useRouter } from 'next/navigation';
 import { v4 as uuidv4 } from 'uuid';
 import { saveAs } from 'file-saver';
+import Spinner from './Spinner';
 
 function GroupedAllFiles() {
   const router = useRouter();
@@ -25,10 +26,12 @@ function GroupedAllFiles() {
     setPartBRejectedFiles,
     allAcceptedOpen,
     setAllAcceptedOpen,
-    allFiles,
-    setAllFiles,
+    setSearchedData,
     allRejectedOpen,
     setAllRejectedOpen,
+    setProgress,
+    searching,
+    setSearching,
   } = useXtrataContext();
 
   //For removal of a file
@@ -37,6 +40,96 @@ function GroupedAllFiles() {
     setFileArray(newFileArray);
   };
 
+  //Extracting parts of each line in a file and checking if its found in the overall files
+  const extractedParts = (file, overallFiles) => {
+    const lines = file.split('\n');
+    const extractedLines = [];
+
+    for (const line of lines) {
+      const firstPart = line.slice(0, 16);
+      const secondPart = line.slice(46, 58);
+      let thirdPart = line.slice(135, 138);
+
+      //Keeping track of the portions found in the overall files
+      let matchFound = false;
+
+      if (thirdPart.charAt(thirdPart.length - 1) === ')') {
+        thirdPart = thirdPart.slice(0, -1);
+      } else {
+        thirdPart = line.slice(135, 138);
+      }
+
+      //Looping through the overall transaction files
+      for (const eachfile of overallFiles) {
+        const reader = new FileReader();
+
+        reader.onload = (evt) => {
+          const overallFilesContent = evt.target.result;
+          const overallFilesLines = overallFilesContent.split('\n');
+          for (const eachLine of overallFilesLines) {
+            if (
+              eachLine.includes(firstPart) &&
+              eachLine.includes(secondPart) &&
+              eachLine.includes(thirdPart)
+            ) {
+              matchFound = true;
+              break;
+            }
+          }
+        };
+        reader.readAsText(eachfile);
+        if (matchFound) {
+          break;
+        }
+      }
+      //If the portions are not found in any of the overall files, push them to an array
+      if (!matchFound) {
+        extractedLines.push(line);
+      }
+    }
+
+    return extractedLines.join('\n');
+  };
+
+  //Searching the extracted files in the overall transaction files
+  const searchAndCheck = (responseFiles, overallFiles) => {
+    setSearching((prev) => (prev === false ? true : prev));
+    const filePromises = responseFiles.map((file) => {
+      const theFileName = file.name.split('.')[0];
+      const reader = new FileReader();
+      return new Promise((resolve) => {
+        reader.onprogress = (evt) => {
+          if (evt.lengthComputable) {
+            const percent = (evt.loaded / evt.total) * 100;
+            setProgress(percent);
+          }
+        };
+        reader.onload = () => {
+          const extractedContent = extractedParts(reader.result, overallFiles);
+          const extractedFile = new Blob([extractedContent], {
+            type: 'text/plain',
+          });
+          const fileName = `${theFileName}_LinesNotFound`;
+          resolve({ file: extractedFile, name: fileName });
+        };
+        reader.readAsText(file);
+      });
+    });
+
+    Promise.all(filePromises)
+      .then((data) => {
+        setSearchedData(data);
+        console.log('searched data: ', data);
+        setProgress(100);
+        setSearching((prev) => (prev === true ? false : prev));
+        setProgress(0);
+      })
+      .catch((err) => {
+        console.log('Error extracting and searching data: ', err);
+        setProgress(0);
+        setSearching((prev) => (prev === true ? false : prev));
+      });
+  };
   return (
     <>
       {/* Accepted files section */}
@@ -47,6 +140,9 @@ function GroupedAllFiles() {
         toggleOpen={() => setAllAcceptedOpen((prev) => !prev)}
       >
         <FilesGroupContainer>
+          {[...partAFiles, ...partBFiles].length > 0
+            ? setAllAcceptedOpen((prev) => (prev === false ? true : prev))
+            : null}
           {[...partAFiles, ...partBFiles].length > 0 ? (
             <>
               <div className='w-full h-auto flex flex-col md:flex-row justify-between items-center'>
@@ -115,9 +211,20 @@ function GroupedAllFiles() {
               </div>
               <button
                 className='mt-4 py-2 px-4 text-white w-full bg-green-500 hover:bg-green-400 md:w-52 md:rounded-full flex items-center justify-center'
-                onClick={''}
+                onClick={() => searchAndCheck(partAFiles, partBFiles)}
+                disabled={searching}
               >
-                <AiOutlineFileSearch className='mr-2' /> Search and check
+                {searching ? (
+                  <Spinner
+                    colorValue={'white'}
+                    loadingValue={searching}
+                    sizeValue={20}
+                  />
+                ) : (
+                  <>
+                    <AiOutlineFileSearch className='mr-2' /> Search and check
+                  </>
+                )}
               </button>
             </>
           ) : (
@@ -138,6 +245,9 @@ function GroupedAllFiles() {
         toggleOpen={() => setAllRejectedOpen((prev) => !prev)}
       >
         <FilesGroupContainer>
+          {[...partARejectedFiles, ...partBRejectedFiles].length > 0
+            ? setAllRejectedOpen((prev) => (prev === false ? true : prev))
+            : null}
           {[...partARejectedFiles, ...partBRejectedFiles].length > 0 ? (
             <>
               {[...partARejectedFiles, ...partBRejectedFiles].map(

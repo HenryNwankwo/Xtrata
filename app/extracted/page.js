@@ -8,13 +8,20 @@ import { imageConfig } from '@/utils/imageConfig';
 import { useXtrataContext } from '@/utils/XtrataContext';
 import FileCard from '@/components/FileCard';
 import FilesGroupContainer from '@/components/FilesGroupContainer';
+import Spinner from '@/components/Spinner';
 
 function page() {
   const date = new Date();
   const hours = date.getHours();
   const minutes = date.getMinutes();
   const seconds = date.getSeconds();
-  const { extractedFiles, setExtractedFiles } = useXtrataContext();
+  const {
+    extractedFiles,
+    setExtractedFiles,
+    downloading,
+    setDownloading,
+    setProgress,
+  } = useXtrataContext();
 
   const imgArray = ['png', 'jpg', 'gif', 'svg', 'jpeg'];
   // individual file download or saving
@@ -25,6 +32,7 @@ function page() {
   //Downloading all files
   const downloadAllFiles = () => {
     const zip = new JSZip();
+    setDownloading((prev) => (prev === false ? true : prev));
 
     //converting the extracted files data URLs from local storage back to blob
     const blobs = extractedFiles.map((item) => ({
@@ -36,9 +44,13 @@ function page() {
       zip.file(extractedFile.name, extractedFile.file);
     });
 
-    zip.generateAsync({ type: 'blob' }).then((content) => {
-      saveAs(content, `xtr-files-${hours}_${minutes}_${seconds}.zip`);
-    });
+    zip
+      .generateAsync({ type: 'blob' }, ({ percent }) => setProgress(percent))
+      .then((content) => {
+        setProgress(0);
+        setDownloading((prev) => (prev === true ? false : prev));
+        saveAs(content, `xtr-files-${hours}_${minutes}_${seconds}.zip`);
+      });
   };
 
   //Removing an extracted file
@@ -78,8 +90,19 @@ function page() {
               <button
                 className='mt-4 py-2 px-4 text-white w-full bg-green-500 hover:bg-green-400 md:w-44 md:rounded-full flex items-center justify-center'
                 onClick={downloadAllFiles}
+                disabled={downloading}
               >
-                <BsDownload className='text-lg mr-2' /> Download All
+                {downloading ? (
+                  <Spinner
+                    colorValue={'white'}
+                    loadingValue={downloading}
+                    sizeValue={20}
+                  />
+                ) : (
+                  <>
+                    <BsDownload className='text-lg mr-2' /> Download All
+                  </>
+                )}
               </button>
             ) : null}
           </>
