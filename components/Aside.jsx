@@ -1,18 +1,32 @@
 'use client';
 import { useXtrataContext } from '@/utils/XtrataContext';
-import { Link as ChakraLink, Box, HStack, VStack } from '@chakra-ui/react';
+import {
+  Link as ChakraLink,
+  Box,
+  HStack,
+  VStack,
+  Badge,
+} from '@chakra-ui/react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { RiMenu5Fill, RiCloseLine } from 'react-icons/ri';
 import { imageConfig } from '@/utils/imageConfig';
 import { FaFileExport } from 'react-icons/fa6';
 import { AiOutlineFileSearch, AiOutlineFile } from 'react-icons/ai';
 import { LuFileCheck, LuFileOutput, LuFileStack } from 'react-icons/lu';
 import { BsChevronDown, BsChevronUp } from 'react-icons/bs';
+import CustomBadge from './CustomBadge';
 
 function Header() {
-  const { isMenuOpen, setIsMenuOpen, filesOpen, setFilesOpen } =
-    useXtrataContext();
+  const {
+    setIsMenuOpen,
+    filesOpen,
+    setFilesOpen,
+    extractedFiles,
+    searchedData,
+  } = useXtrataContext();
+
+  const numberOfMissingFiles = searchedData.length;
+  const numberOfExtractedFiles = extractedFiles.length;
 
   //Closes and opens menu
   const menuHandler = () => {
@@ -69,6 +83,7 @@ function Header() {
       textDecoration: 'none',
       bg: 'whiteAlpha.200',
     },
+    position: 'relative',
   };
   const menuStyles = {
     display: 'flex',
@@ -121,7 +136,12 @@ function Header() {
             sx={navLinkStyles}
             onClick={() => setFilesOpen((prev) => !prev)}
           >
-            <LuFileStack className='text-lg md:text-2xl text-white lg:mr-2 w-10 mb-1 lg:mb-0' />
+            <Box position='relative'>
+              <LuFileStack className='text-lg md:text-2xl text-white lg:mr-2 w-10 mb-1 lg:mb-0 relative' />
+              <CustomBadge>
+                {numberOfExtractedFiles + numberOfMissingFiles}
+              </CustomBadge>
+            </Box>
             <p className='text-xs md:text-base'>Files</p>
             {filesOpen ? (
               <BsChevronUp className='text-lg md:text-2xl text-white lg:ml-2 w-10 mb-1 lg:mb-0' />
@@ -141,11 +161,21 @@ function Header() {
               }}
             >
               <ChakraLink as={Link} href='extracted' sx={navLinkStyles}>
-                <LuFileOutput className='text-lg md:text-2xl text-white lg:mr-2 w-10 mb-1 lg:mb-0' />
+                <Box position='relative'>
+                  <LuFileOutput className='text-lg md:text-2xl text-white lg:mr-2 w-10 mb-1 lg:mb-0' />
+                  {extractedFiles.length > 0 ? (
+                    <CustomBadge>{numberOfExtractedFiles}</CustomBadge>
+                  ) : null}
+                </Box>
                 <p className='text-[0.5rem] md:text-base'>Extracted</p>
               </ChakraLink>
               <ChakraLink as={Link} href='missing-lines' sx={navLinkStyles}>
-                <LuFileCheck className='text-lg md:text-2xl text-white lg:mr-2 w-10 mb-1 lg:mb-0' />
+                <Box position='relative'>
+                  <LuFileCheck className='text-lg md:text-2xl text-white lg:mr-2 w-10 mb-1 lg:mb-0' />
+                  {searchedData.length > 0 ? (
+                    <CustomBadge>{numberOfMissingFiles}</CustomBadge>
+                  ) : null}
+                </Box>
                 <p className='text-[0.5rem] md:text-base'>Checked</p>
               </ChakraLink>
             </VStack>
