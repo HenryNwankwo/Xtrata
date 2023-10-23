@@ -1,15 +1,18 @@
 'use client';
 import { useXtrataContext } from '@/utils/XtrataContext';
-import { Link as ChakraLink, Box, HStack } from '@chakra-ui/react';
+import { Link as ChakraLink, Box, HStack, VStack } from '@chakra-ui/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { RiMenu5Fill, RiCloseLine } from 'react-icons/ri';
 import { imageConfig } from '@/utils/imageConfig';
 import { FaFileExport } from 'react-icons/fa6';
 import { AiOutlineFileSearch, AiOutlineFile } from 'react-icons/ai';
+import { LuFileCheck, LuFileOutput, LuFileStack } from 'react-icons/lu';
+import { BsChevronDown, BsChevronUp } from 'react-icons/bs';
 
 function Header() {
-  const { isMenuOpen, setIsMenuOpen } = useXtrataContext();
+  const { isMenuOpen, setIsMenuOpen, filesOpen, setFilesOpen } =
+    useXtrataContext();
 
   //Closes and opens menu
   const menuHandler = () => {
@@ -33,6 +36,7 @@ function Header() {
     alignItems: 'center',
     position: 'fixed',
     top: 0,
+    overflowY: 'auto',
   };
   const logoStyles = {
     fontSize: 25,
@@ -76,11 +80,7 @@ function Header() {
     py: { base: 5 },
     marginTop: '20px',
   };
-  const menuBurgerStyles = {
-    display: { base: 'flex', md: 'none' },
-    w: 'fit-content',
-    h: 'fit-content',
-  };
+
   return (
     <Box as='aside' sx={asideStyles}>
       <ChakraLink as={Link} href='/' sx={logoStyles}>
@@ -115,14 +115,43 @@ function Header() {
           <AiOutlineFileSearch className='text-lg md:text-2xl text-white lg:mr-2 w-10 mb-1 lg:mb-0' />
           <p className='text-xs md:text-base'>Check</p>
         </ChakraLink>
+        <VStack sx={{ w: '100%' }}>
+          <HStack
+            as='button'
+            sx={navLinkStyles}
+            onClick={() => setFilesOpen((prev) => !prev)}
+          >
+            <LuFileStack className='text-lg md:text-2xl text-white lg:mr-2 w-10 mb-1 lg:mb-0' />
+            <p className='text-xs md:text-base'>Files</p>
+            {filesOpen ? (
+              <BsChevronUp className='text-lg md:text-2xl text-white lg:ml-2 w-10 mb-1 lg:mb-0' />
+            ) : (
+              <BsChevronDown className='text-lg md:text-2xl text-white lg:ml-2 w-10 mb-1 lg:mb-0' />
+            )}
+          </HStack>
+
+          {/* Files Inner dropdowm */}
+          {filesOpen ? (
+            <VStack
+              sx={{
+                w: '100%',
+                bg: 'blue.900',
+                h: 'auto',
+                py: '5px',
+              }}
+            >
+              <ChakraLink as={Link} href='extracted' sx={navLinkStyles}>
+                <LuFileOutput className='text-lg md:text-2xl text-white lg:mr-2 w-10 mb-1 lg:mb-0' />
+                <p className='text-[0.5rem] md:text-base'>Extracted</p>
+              </ChakraLink>
+              <ChakraLink as={Link} href='missing-lines' sx={navLinkStyles}>
+                <LuFileCheck className='text-lg md:text-2xl text-white lg:mr-2 w-10 mb-1 lg:mb-0' />
+                <p className='text-[0.5rem] md:text-base'>Checked</p>
+              </ChakraLink>
+            </VStack>
+          ) : null}
+        </VStack>
       </HStack>
-      {/* <Box as='button' sx={menuBurgerStyles} onClick={menuHandler}>
-        {isMenuOpen ? (
-          <RiCloseLine className='text-white text-3xl hover:cursor-pointer' />
-        ) : (
-          <RiMenu5Fill className='text-white text-3xl hover:cursor-pointer' />
-        )}
-      </Box> */}
     </Box>
   );
 }

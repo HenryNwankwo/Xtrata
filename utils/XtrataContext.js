@@ -22,6 +22,7 @@ export const XtrataProvider = ({ children }) => {
   const [extracting, setExtracting] = useState(false);
   const [searching, setSearching] = useState(false);
   const [downloading, setDownloading] = useState(false);
+  const [filesOpen, setFilesOpen] = useState(false);
 
   //The object values of the provider
   const providerValues = {
@@ -61,6 +62,8 @@ export const XtrataProvider = ({ children }) => {
     setSearching,
     downloading,
     setDownloading,
+    filesOpen,
+    setFilesOpen,
   };
 
   return (
