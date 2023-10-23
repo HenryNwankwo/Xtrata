@@ -118,9 +118,9 @@ function GroupedAllFiles() {
 
     Promise.all(filePromises)
       .then((data) => {
-        setSearchedData(data);
-        console.log('searched data: ', data);
+        setSearchedData(data);        
         setProgress(100);
+        router.push('/missing-lines')
         setSearching((prev) => (prev === true ? false : prev));
         setProgress(0);
       })
