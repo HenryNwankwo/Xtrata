@@ -41,48 +41,62 @@ function GroupedAllFiles() {
   };
 
   //Extracting parts of each line in a file and checking if its found in the overall files
-  const extractedParts = (file, overallFiles) => {
+
+  const extractedParts = async (file, overallFiles) => {
     const lines = file.split('\n');
     const extractedLines = [];
+
+    // Read content of overall files and store it in memory
+    const overallFilesContentPromises = overallFiles.map((file) => {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+
+        reader.onload = (evt) => {
+          resolve(evt.target.result);
+        };
+
+        reader.onerror = (error) => {
+          reject(error);
+        };
+
+        reader.readAsText(file);
+      });
+    });
+
+    const overallFilesContentArray = await Promise.all(
+      overallFilesContentPromises
+    );
 
     for (const line of lines) {
       const firstPart = line.slice(0, 16);
       const secondPart = line.slice(46, 58);
       let thirdPart = line.slice(135, 138);
 
-      //Keeping track of the portions found in the overall files
-      let matchFound = false;
-
       if (thirdPart.charAt(thirdPart.length - 1) === ')') {
         thirdPart = thirdPart.slice(0, -1);
-      } else {
-        thirdPart = line.slice(135, 138);
       }
 
-      //Looping through the overall transaction files
-      for (const eachfile of overallFiles) {
-        const reader = new FileReader();
+      let matchFound = false;
 
-        reader.onload = (evt) => {
-          const overallFilesContent = evt.target.result;
-          const overallFilesLines = overallFilesContent.split('\n');
-          for (const eachLine of overallFilesLines) {
-            if (
-              eachLine.includes(firstPart) &&
-              eachLine.includes(secondPart) &&
-              eachLine.includes(thirdPart)
-            ) {
-              matchFound = true;
-              break;
-            }
+      // Check if the line matches criteria in any of the overall files
+      for (const overallFileContent of overallFilesContentArray) {
+        const overallFilesLines = overallFileContent.split('\n');
+        for (const eachLine of overallFilesLines) {
+          if (
+            eachLine.includes(firstPart) &&
+            eachLine.includes(secondPart) &&
+            eachLine.includes(thirdPart)
+          ) {
+            matchFound = true;
+            break;
           }
-        };
-        reader.readAsText(eachfile);
+        }
         if (matchFound) {
           break;
         }
       }
-      //If the portions are not found in any of the overall files, push them to an array
+
+      // If the line doesn't match in any of the overall files, push it to the extractedLines array
       if (!matchFound) {
         extractedLines.push(line);
       }
@@ -104,13 +118,27 @@ function GroupedAllFiles() {
             setProgress(percent);
           }
         };
-        reader.onload = () => {
-          const extractedContent = extractedParts(reader.result, overallFiles);
-          const extractedFile = new Blob([extractedContent], {
-            type: 'text/plain',
-          });
-          const fileName = `${theFileName}_LinesNotFound`;
-          resolve({ file: extractedFile, name: fileName });
+        reader.onload = async () => {
+          try {
+            const extractedContent = await extractedParts(
+              reader.result,
+              overallFiles
+            );
+
+            //Checking if the return result is empty (that is all the lines in the file are found in the overallfiles)
+            if (extractedContent.trim() === '') {
+              resolve(null); //exclude this file
+            } else {
+              const extractedFile = new Blob([extractedContent], {
+                type: 'text/plain',
+              });
+              const fileName = `${theFileName}_missingLines.txt`;
+              resolve({ file: extractedFile, name: fileName });
+            }
+          } catch (error) {
+            console.log('An error occured: ', error);
+            resolve(null); //exclude the file due to error
+          }
         };
         reader.readAsText(file);
       });
@@ -118,9 +146,10 @@ function GroupedAllFiles() {
 
     Promise.all(filePromises)
       .then((data) => {
-        setSearchedData(data);        
+        const filteredData = data.filter((item) => item !== null);
+        setSearchedData(filteredData);
+        router.push('/missing-lines');
         setProgress(100);
-        router.push('/missing-lines')
         setSearching((prev) => (prev === true ? false : prev));
         setProgress(0);
       })
